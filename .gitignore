@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 
 # Build outputs
 dist/
@@ -54,3 +53,6 @@ Thumbs.db
 *.pid
 *.seed
 *.pid.lock
+
+# Husky internal files
+.husky/_/
