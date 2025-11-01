@@ -1,8 +1,12 @@
 {
   "name": "bsc-plugin-auto-google-fonts",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "BrighterScript plugin to automatically download and use Google Fonts in Roku SceneGraph components",
   "main": "dist/google-fonts-plugin.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonesmarquelle/bsc-plugin-auto-google-fonts.git"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
