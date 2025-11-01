@@ -14,7 +14,7 @@ A BrighterScript plugin that makes it easy to use Google Fonts in your Roku Scen
 ## Installation
 
 ```bash
-npm install google-fonts-roku
+npm install bsc-plugin-auto-google-fonts
 ```
 
 ## Usage
