@@ -1,4 +1,4 @@
-# Google Fonts Roku
+# Auto Google Fonts
 
 A BrighterScript plugin that makes it easy to use Google Fonts in your Roku SceneGraph applications. Simply reference any Google Font by name, and the plugin automatically downloads and bundles it with your app.
 
