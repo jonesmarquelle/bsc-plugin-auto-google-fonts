@@ -9,7 +9,7 @@
     "stagingDir": "./out/staging",
     "require": ["ts-node/register"],
     "plugins": [
-        "./src/google-fonts-plugin.ts"
+        "./source/google-fonts-plugin.ts"
     ]
 }
 
