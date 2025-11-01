@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "utf-8" ?> 
+
+<component name = "FontDemoScene" extends = "Scene">
+    <script type="text/brightscript" uri="FontDemo.brs" />
+    <children>
+        <Rectangle 
+        id="background"
+        width="1280"
+        height="720"
+        color="0x2c2c2cFF" />
+
+        <LayoutGroup
+        id="contentLayout"
+        layoutDirection="vert"
+        vertAlignment="center"
+        horizAlignment="center"
+        translation="[640, 360]"
+        itemSpacings="[20]">
+        
+            <Label
+            id = "textLabel" 
+            text = "MediumBoldSystemFont from Roku" 
+            font = "font:MediumBoldSystemFont" 
+            color = "0xEFEFEFFF"
+            horizAlign="center"
+            fontSize = "100" />
+
+            <Label
+            id = "textLabel" 
+            text = "Figtree from Google Fonts" 
+            font = "googleFont:Figtree" 
+            color = "0xEFEFEFFF"
+            horizAlign="center"
+            fontSize = "100" />
+        </LayoutGroup>
+    </children>
+</component>

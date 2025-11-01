@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+out/
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+!demo/**/*.js
+!demo/**/*.brs
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Roku deployment files (if any)
+*.zip
+*.pkg
+
+# Debug files
+*.log
+*.pid
+*.seed
+*.pid.lock

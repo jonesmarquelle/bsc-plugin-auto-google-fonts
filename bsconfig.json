@@ -1,0 +1,15 @@
+{
+    "rootDir": "demo",
+    "files": [
+        "source/**/*",
+        "components/**/*",
+        "fonts/**/*",
+        "manifest"
+    ],
+    "stagingDir": "./out/staging",
+    "require": ["ts-node/register"],
+    "plugins": [
+        "./src/google-fonts-plugin.ts"
+    ]
+}
+
