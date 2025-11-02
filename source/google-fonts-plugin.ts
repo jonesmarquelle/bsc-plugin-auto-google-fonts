@@ -1,9 +1,20 @@
 import { Plugin, BeforeFileTranspileEvent, AfterFileTranspileEvent, isBrsFile, isXmlFile, WalkMode, createVisitor, TokenKind, ProgramBuilder, Program } from 'brighterscript';
 import { FontDownloader } from './font-downloader';
-import * as path from 'path';
-import * as fs from 'fs';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 
-export default function () {
+/**
+ * Scan file content for googleFont: references
+ */
+function scanForGoogleFonts(content: string, fontsSet: Set<string>): void {
+    const regex = /googleFont:([a-zA-Z0-9\s+]+)/g;
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+        fontsSet.add(match[1].trim());
+    }
+}
+
+export default function googleFontsPlugin() {
     let fontDownloader: FontDownloader;
     let fontsDir: string;
     let stagingDir: string;
@@ -29,20 +40,9 @@ export default function () {
 
             // Scan all files for googleFont: references
             for (const file of Object.values(program.files)) {
-                if (isBrsFile(file)) {
+                if (isBrsFile(file) || isXmlFile(file)) {
                     const content = file.fileContents || '';
-                    const regex = /googleFont:([a-zA-Z0-9\s+]+)/g;
-                    let match;
-                    while ((match = regex.exec(content)) !== null) {
-                        fontsToDownload.add(match[1].trim());
-                    }
-                } else if (isXmlFile(file)) {
-                    const content = file.fileContents || '';
-                    const regex = /googleFont:([a-zA-Z0-9\s+]+)/g;
-                    let match;
-                    while ((match = regex.exec(content)) !== null) {
-                        fontsToDownload.add(match[1].trim());
-                    }
+                    scanForGoogleFonts(content, fontsToDownload);
                 }
             }
 
@@ -95,7 +95,7 @@ export default function () {
                 event.file.ast.walk(createVisitor({
                     LiteralExpression: (literal) => {
                         if (literal.token.kind === TokenKind.StringLiteral && literal.token.text.includes('googleFont:')) {
-                            const newText = literal.token.text.replace(/googleFont:([a-zA-Z0-9\s+]+)/g, (_match: string, fontFamily: string) => {
+                            const newText = literal.token.text.replaceAll(/googleFont:([a-zA-Z0-9\s+]+)/g, (_match: string, fontFamily: string) => {
                                 try {
                                     const fontPath = fontDownloader.downloadFont(fontFamily.trim());
                                     return `pkg:/fonts/${fontPath}`;
@@ -121,7 +121,7 @@ export default function () {
                 const regex = /googleFont:([a-zA-Z0-9\s+]+)/g;
                 
                 if (regex.test(event.code)) {
-                    event.code = event.code.replace(/googleFont:([a-zA-Z0-9\s+]+)/g, (_match: string, fontFamily: string) => {
+                    event.code = event.code.replaceAll(/googleFont:([a-zA-Z0-9\s+]+)/g, (_match: string, fontFamily: string) => {
                         try {
                             const fontPath = fontDownloader.downloadFont(fontFamily.trim());
                             return `pkg:/fonts/${fontPath}`;

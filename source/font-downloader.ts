@@ -1,10 +1,10 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { execSync } from 'child_process';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { execSync } from 'node:child_process';
 
 export class FontDownloader {
-    private fontsCache: Map<string, string> = new Map();
-    private fontDir: string;
+    private readonly fontsCache: Map<string, string> = new Map();
+    private readonly fontDir: string;
 
     constructor(fontDir: string) {
         this.fontDir = fontDir;
@@ -18,7 +18,7 @@ export class FontDownloader {
      * Example: "Momo Signature" -> "momosignature"
      */
     private toGithubFontName(fontFamily: string): string {
-        return fontFamily.toLowerCase().replace(/[^a-z0-9]/g, '');
+        return fontFamily.toLowerCase().replaceAll(/[^a-z0-9]/g, '');
     }
 
     /**
@@ -68,7 +68,7 @@ export class FontDownloader {
                 
                 for (const item of items) {
                     // Filter for .ttf files (contentType: "file" and name ends with .ttf)
-                    if (item.contentType === 'file' && item.name && item.name.endsWith('.ttf')) {
+                    if (item.contentType === 'file' && item.name?.endsWith('.ttf')) {
                         ttfFiles.push(item.name);
                     }
                 }
@@ -93,19 +93,19 @@ export class FontDownloader {
         // 3. Regular static fonts
         // 4. Any other font
 
-        // Sort files by length ascending
-        const sortedFiles = files.sort((a, b) => a.length - b.length);
+        // Sort files by length ascending (create copy to avoid mutation)
+        const sortedFiles = [...files].sort((a: string, b: string) => a.length - b.length);
 
         // Check for variable fonts with [wght]
-        const wghtVariable = sortedFiles.find(f => f.includes('[wght]'));
+        const wghtVariable = sortedFiles.find((f: string) => f.includes('[wght]'));
         if (wghtVariable) return wghtVariable;
 
         // Check for other variable fonts
-        const anyVariable = sortedFiles.find(f => f.includes('[') && f.includes(']'));
+        const anyVariable = sortedFiles.find((f: string) => f.includes('[') && f.includes(']'));
         if (anyVariable) return anyVariable;
 
         // Check for Regular variant
-        const regular = sortedFiles.find(f => f.includes('Regular.ttf'));
+        const regular = sortedFiles.find((f: string) => f.includes('Regular.ttf'));
         if (regular) return regular;
 
         // Return first .ttf file
@@ -134,7 +134,9 @@ export class FontDownloader {
         }
 
         console.log(`Found ${availableFiles.length} font file(s):`);
-        availableFiles.forEach(f => console.log(`  - ${f}`));
+        for (const f of availableFiles) {
+            console.log(`  - ${f}`);
+        }
 
         // Choose the best file
         const bestFile = this.chooseBestFontFile(availableFiles);
@@ -192,7 +194,8 @@ export class FontDownloader {
                     return fontPath;
                 }
             } catch (err) {
-                console.log(`Not found in ${directory}, trying next directory...`);
+                // Font not found in this directory, continue to next
+                console.log(`Not found in ${directory}, trying next directory... (${err})`);
             }
         }
 
